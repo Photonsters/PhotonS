@@ -1,0 +1,13 @@
+Z Stepper Driver - A4988
+2x MIPI Bridge - SSD2828QN4
+FPGA - SPARTAN6 XC6LX9
+MCU - STM32f407ZET6
+Memory - HYNIX HY57V641620FTP-7
+2x SPI Flash - winband 25064jvs10
+EEPROM - 24c04n
+3x MOSFET - WSF40N06
+Voltage Reg - ams1117-1.8
+Voltage Reg - ams1117-1.2
+Voltage Reg - ams1117-3.3
+Step Down Converter - MP1584 
+Multi Output Reg - TPS65135
