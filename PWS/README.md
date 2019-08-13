@@ -10,11 +10,11 @@ This document records the results of trying to reverse engineer the new file for
 The binary file seems to be divided into five sections FileHeader, Header, Preview, LayerDef each marked with a magic text value; and then the RLE encoded layer image data.
 
 The text values used for section magics could be 12 bytes with zero byte padding, or 8 bytes with zero padded and a zero 4 byte value.
-Integer values have little-endian byte order.
+Integer and Float values have little-endian byte order.
 
 Note: Fields with unknown usage are named and numbered from the offset in bytes from the beginning of the section magic value.
 
-| Name | Length | Type | Value from  R_E_R_F.pws| Note |
+| Name | Length | Type | Value from  R_E_R_F.pws | Note |
 | --- | --- | --- | --- | --- |
 | FileHeaderMagic | 12 | Text | ANYCUBIC | |
 | FileHeaderUnknown12 | 4 | Unknown | 0x01000000 | |
@@ -23,20 +23,20 @@ Note: Fields with unknown usage are named and numbered from the offset in bytes 
 | FileHeaderUnknown24 | 4 | Unknown | 0x00000000 | |
 | FileHeaderUnknown28 | 4 | Unknown | 0x90000000 | |
 | FileHeaderUnknown32 | 4 | Unknown | 0x00000000 | |
-| FileHeaderUnknown36 | 4 | Unknown | 0xac260100 | |
+| FileHeaderUnknown36 | 4 | Int | 0xac260100 | Layerdef file position.|
 | FileHeaderUnknown40 | 4 | Unknown | 0x00000000 | |
-| FileHeaderUnknown44 | 4 | Unknown | 0xc04a0100 | |
+| FileHeaderUnknown44 | 4 | Int | 0xc04a0100 | LayerImage file position. |
 | HeaderMagic | 12 | Text | HEADER | |
 | HeaderLength | 4 | Int | 80 | |
-| HeaderUnknown16 | 4 | Unknown | 0x00003d42 | |
-| HeaderUnknown20 | 4 | Unknown | 0xcdcc4c3d | |
-| HeaderUnknown24 | 4 | Unknown | 0x00008040 | |
-| HeaderUnknown28 | 4 | Unknown | 0x0000803f | |
-| HeaderUnknown32 | 4 | Unknown | 0x00007042 | |
-| HeaderUnknown36 | 4 | Unknown | 0x00004040 | |
-| HeaderUnknown40 | 4 | Unknown | 0x0000c040 | |
-| HeaderUnknown44 | 4 | Unknown | 0x00004040 | |
-| HeaderUnknown48 | 4 | Unknown | 0x00004040 | |
+| HeaderUnknown16 | 4 | Float | 0x00003d42, 47.25 | Pixel size? |
+| HeaderUnknown20 | 4 | Float | 0xcdcc4c3d, 0.05 | Layer height? |
+| HeaderUnknown24 | 4 | Float | 0x00008040, 4.0 | |
+| HeaderUnknown28 | 4 | Float | 0x0000803f, 1.0 | |
+| HeaderUnknown32 | 4 | Float | 0x00007042, 60.0 | |
+| HeaderUnknown36 | 4 | Float | 0x00004040, 3.0 | |
+| HeaderUnknown40 | 4 | Float | 0x0000c040, 6.0 | |
+| HeaderUnknown44 | 4 | Float | 0x00004040, 3.0 | |
+| HeaderUnknown48 | 4 | Float | 0x00004040, 3.0 | |
 | HeaderUnknown52 | 4 | Unknown | 0x531bac41 | |
 | HeaderUnknown56 | 4 | Unknown | 0x01000000 | |
 | HeaderLayerX | 4 | Int | 1440 | |
@@ -59,6 +59,19 @@ Note: Fields with unknown usage are named and numbered from the offset in bytes 
 | LayerdefCount | 4 | Int | 288 | |
 | Layerdef | LayerdefCount * 32 | Binary | 0xc04a01005c8900000000c0400000404000007042000000000000000000000000 0x1cd401005c8900000000c0400000404000007042000000000000000000000000 ... | TODO |
 | LayerImages | Variable | Binary | 0x7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d7d ... | Bit-level RLE (0x7d gives 125 zero bits and 0xfd gives 125 one bits).   Decode HeaderLayerX bits to produce a layer image line then repeat HeaderLayerY times to produce a 2-bit layer image. |
+
+### Layerdef
+
+| Name | Length | Type | Value from  R_E_R_F.pws first layer | Note |
+| --- | --- | --- | --- | --- |
+| LayerdefUnknown0 | 4 | Int | 0xc04a0100 | Layer file position. |
+| LayerdefUnknown4 | 4 | Int | 0x5c890000 | Layer length|
+| LayerdefUnknown8 | 4 | Float | 0x0000c040, 6.0 | |
+| LayerdefUnknown12 | 4 | Float | 0x00004040, 3.0 | |
+| LayerdefUnknown16 | 4 | Float | 0x00007042, 60.0 | |
+| LayerdefUnknown20 | 4 | Unknown | 0x00000000 | |
+| LayerdefUnknown24 | 4 | Unknown | 0x00000000 | |
+| LayerdefUnknown28 | 4 | Unknown | 0x00000000 | |
 
 ## Tools Used
 
