@@ -11,9 +11,9 @@ PIN Number,PIN Label,Connected To
 10,PF0,
 11,PF1,
 12,PF2,
-13,PF3,
+13,PF3,A4988 DIR
 14,PF4,
-15,PF5,
+15,PF5,A4988 STEP
 16,Vss,
 17,Vdd,
 18,PF6,
